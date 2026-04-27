@@ -1,0 +1,25 @@
+.header { text-align: center; margin-bottom: 3rem; }
+.header h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+.header p { color: var(--text-muted); font-size: 1.1rem; }
+
+.backBtn { margin-bottom: 1.5rem; }
+
+.albumCard { padding: 0; overflow: hidden; cursor: pointer; }
+.albumCover { height: 220px; overflow: hidden; }
+.albumCover img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-normal); }
+.albumCard:hover .albumCover img { transform: scale(1.05); }
+.albumPlaceholder { height: 100%; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: var(--text-muted); }
+.albumInfo { padding: 1.25rem; }
+.albumInfo h3 { font-family: var(--font-sans); margin-bottom: 0.5rem; }
+.albumInfo p { color: var(--text-muted); font-size: 0.9rem; }
+
+.mediaGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+.mediaItem { position: relative; border-radius: var(--radius-md); overflow: hidden; cursor: pointer; aspect-ratio: 4/3; }
+.mediaItem img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-normal); }
+.mediaItem:hover img { transform: scale(1.05); }
+.mediaOverlay { position: absolute; inset: 0; background: rgba(15,23,42,0.3); display: flex; align-items: center; justify-content: center; color: white; opacity: 0; transition: opacity var(--transition-normal); }
+.mediaItem:hover .mediaOverlay { opacity: 1; }
+
+.lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 2rem; }
+.lightbox img { max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: var(--radius-md); }
+.lightboxCaption { color: white; margin-top: 1rem; font-size: 1.1rem; }

@@ -1,0 +1,129 @@
+.authContainer {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  padding: 4rem 1rem;
+}
+
+.authContainer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.85); /* Deep Navy Overlay */
+}
+
+.authCard {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hover);
+  padding: 2.5rem;
+  border-top: 5px solid var(--accent-color);
+}
+
+.authHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.authHeader h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.authHeader p {
+  color: var(--text-muted);
+}
+
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.passwordInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordInput input {
+  padding-right: 2.5rem;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 0.75rem;
+  color: var(--text-muted);
+}
+
+.eyeBtn:hover {
+  color: var(--accent-color);
+}
+
+.authActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.forgotLink {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+.forgotLink:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  height: 3rem;
+}
+
+.authFooter {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.authFooter a {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+.authFooter a:hover {
+  text-decoration: underline;
+}

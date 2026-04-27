@@ -1,0 +1,17 @@
+.wrapper { display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem; align-items: start; }
+@media (max-width: 768px) { .wrapper { grid-template-columns: 1fr; } }
+
+.infoPanel { padding: 2.5rem; background: var(--primary-color); color: var(--text-light); border-radius: var(--radius-lg); }
+.infoPanel h1 { color: var(--surface-color); font-size: 2.5rem; margin-bottom: 1rem; }
+.infoPanel > p { color: #94a3b8; margin-bottom: 2.5rem; }
+
+.contactDetails { display: flex; flex-direction: column; gap: 2rem; }
+.contactItem h3 { font-family: var(--font-sans); font-size: 1rem; margin-bottom: 0.5rem; color: var(--accent-color); }
+.contactItem p { color: #cbd5e1; }
+
+.contactForm { background: var(--surface-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 2.5rem; border: 1px solid var(--border-color); }
+.formRow { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 640px) { .formRow { grid-template-columns: 1fr; } }
+
+.inputGroup { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+.inputGroup label { font-size: 0.9rem; font-weight: 600; color: var(--primary-color); }

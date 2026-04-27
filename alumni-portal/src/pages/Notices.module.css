@@ -1,0 +1,10 @@
+.noticeList { display: flex; flex-direction: column; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
+.noticeCard { transition: border-left-color var(--transition-fast); border-left: 4px solid transparent; }
+.noticeCard:hover { border-left-color: var(--accent-color); }
+.noticeMeta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.pinnedBadge { display: inline-flex; align-items: center; gap: 0.25rem; }
+.noticeDate { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
+.noticeTitle { font-family: var(--font-sans); font-size: 1.25rem; margin-bottom: 0.75rem; }
+.noticeContent { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+.attachment { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary-color); font-weight: 500; padding: 0.5rem 1rem; background: #f1f5f9; border-radius: var(--radius-md); transition: all var(--transition-fast); }
+.attachment:hover { background: var(--primary-color); color: var(--surface-color); }

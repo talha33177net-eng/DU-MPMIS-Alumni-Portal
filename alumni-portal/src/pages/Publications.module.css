@@ -1,0 +1,127 @@
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: var(--surface-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background: #f8fafc;
+  overflow-x: auto;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  padding: 1.25rem 2rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.tab:hover {
+  color: var(--primary-color);
+  background: rgba(15, 23, 42, 0.02);
+}
+.activeTab {
+  color: var(--primary-color);
+  border-bottom-color: var(--accent-color);
+  background: var(--surface-color);
+}
+
+/* Content */
+.content {
+  padding: 2rem;
+  min-height: 400px;
+}
+.loaderWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.pubTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pubTable th {
+  text-align: left;
+  padding: 1rem;
+  background: #f1f5f9;
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-color);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pubTable td {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.pubTable tr:hover {
+  background: rgba(241, 245, 249, 0.5);
+}
+.pubTable tr:last-child td {
+  border-bottom: none;
+}
+
+.dateCol {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.titleCol {
+  font-weight: 600;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.docIcon { color: var(--accent-color); flex-shrink: 0; }
+.sizeCol {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.actionCol {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .pubTable thead { display: none; }
+  .pubTable tr, .pubTable td { display: block; width: 100%; }
+  .pubTable tr { border-bottom: 1px solid var(--border-color); padding: 1rem 0; }
+  .pubTable td { padding: 0.5rem; border: none; }
+  .actionCol { justify-content: flex-start; margin-top: 1rem; }
+  .titleCol { font-size: 1.1rem; }
+  .dateCol { display: inline-flex; margin-bottom: 0.5rem; }
+}

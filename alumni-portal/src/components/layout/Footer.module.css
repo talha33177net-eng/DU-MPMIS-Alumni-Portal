@@ -1,0 +1,163 @@
+.footer {
+  background-color: #191970; /* Midnight Blue */
+  color: #e2e8f0;
+  padding-top: 5rem;
+  margin-top: auto;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 3rem;
+  padding-bottom: 4rem;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.brandTitle {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.brandDesc {
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  color: #cbd5e1;
+  transition: all var(--transition-fast);
+}
+
+.socialIcon:hover {
+  background: var(--accent-color);
+  color: var(--surface-color);
+  transform: translateY(-3px);
+}
+
+.groupTitle {
+  font-size: 1.25rem;
+  color: var(--surface-color);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.groupTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--accent-color);
+}
+
+.linkList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.linkList a {
+  color: #94a3b8;
+  display: inline-block;
+  transition: all var(--transition-fast);
+}
+
+.linkList a:hover {
+  color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+.contactList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+}
+
+.contactList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.contactIcon {
+  color: var(--accent-color);
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.contactBtn {
+  border-color: rgba(255,255,255,0.2) !important;
+  color: var(--surface-color) !important;
+}
+
+.contactBtn:hover {
+  background-color: var(--surface-color) !important;
+  color: var(--primary-color) !important;
+}
+
+.bottomBar {
+  background-color: rgba(0,0,0,0.2);
+  padding: 1.5rem 0;
+}
+
+.bottomContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .bottomContainer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legalLinks a {
+  transition: color var(--transition-fast);
+}
+
+.legalLinks a:hover {
+  color: var(--surface-color);
+}
