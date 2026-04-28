@@ -23,11 +23,11 @@ const ApplyMembership = () => {
     const file = e.target.files[0];
     if (!file) return;
     const formData = new FormData();
-    formData.append('File', file);
+    formData.append('file', file);
     const loadingToast = toast.loading('Uploading photo...');
     try {
-      const res = await api.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      setApplyForm({ ...applyForm, profilePhoto: res.data.url });
+      const res = await api.post('/auth/me/photo', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      setApplyForm({ ...applyForm, profilePhoto: res });
       toast.success('Photo uploaded', { id: loadingToast });
     } catch (err) {
       toast.error('Failed to upload photo', { id: loadingToast });

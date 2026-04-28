@@ -1,7 +1,7 @@
 import { FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
-
+import 'react-quill-new/dist/quill.snow.css';
 const Constitution = () => {
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,9 @@ const Constitution = () => {
 
       <div className="card" style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem' }}>
         {content ? (
-          <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: content }} />
+          <div className="ql-snow" style={{ border: 'none' }}>
+            <div className="ql-editor" style={{ padding: 0 }} dangerouslySetInnerHTML={{ __html: content }} />
+          </div>
         ) : (
           <div style={{ textAlign: 'center', padding: '2rem' }}>
             <FileText size={64} style={{ color: 'var(--text-muted)', margin: '0 auto 1rem', opacity: 0.5 }} />

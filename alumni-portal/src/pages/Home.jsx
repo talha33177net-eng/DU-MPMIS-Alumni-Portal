@@ -21,7 +21,7 @@ const Home = () => {
     },
     {
       image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80",
-      title: "Mass Communication and Journalism",
+      title: "Master of Professional MIS (MPMIS)",
       subtitle: "Building a stronger community for tomorrow.",
       buttons: [
         { label: "Election Form", link: "/elections", primary: true },
@@ -194,7 +194,7 @@ const Home = () => {
                 <p key={i} style={{ marginBottom: '1rem' }}>{paragraph}</p>
               )) : (
                 <>
-                  <p style={{ marginBottom: '1rem' }}>The Dhaka University Mass Communication and Journalism Alumni Association (DU MPMIS) represents a prestigious network of intellectual leaders, journalists, and strategic communicators worldwide.</p>
+                  <p style={{ marginBottom: '1rem' }}>The Dhaka University Master of Professional MIS (MPMIS) Alumni Association (DU MPMIS) represents a prestigious network of intellectual leaders, management professionals, and strategic thinkers worldwide.</p>
                   <p>Since our inception, we have passionately fostered professional excellence, academic collaboration, and meaningful engagements. We are more than an association; we are a family dedicated to empowering the next generation of media pioneers.</p>
                 </>
               )}

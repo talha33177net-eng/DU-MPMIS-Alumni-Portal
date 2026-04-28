@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, FileText } from 'lucide-react';
+import { Plus, Edit, Trash2, FileText, X } from 'lucide-react';
 import { format } from 'date-fns';
 
 const ManageBlogs = () => {
@@ -156,38 +156,41 @@ const ManageBlogs = () => {
       </div>
 
       {showModal && (
-        <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000}}>
-          <div style={{background: 'var(--background-secondary)', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto'}}>
-            <h2 style={{marginTop: 0, color: 'var(--accent-color)'}}>{editId ? 'Edit Blog' : 'Create Blog'}</h2>
-            <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-              
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '750px', maxHeight: '100%', overflowY: 'auto', backgroundColor: 'var(--surface-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, background: 'var(--surface-color)', zIndex: 10 }}>
+              <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>{editId ? 'Edit Blog Post' : 'Create Blog Post'}</h3>
+              <button onClick={() => setShowModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={24}/></button>
+            </div>
+            <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Title</label>
-                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Title *</label>
+                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="form-control" />
               </div>
 
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Content (HTML or Markdown)</label>
-                <textarea rows="10" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px', fontFamily: 'monospace'}}></textarea>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Content (HTML or Markdown)</label>
+                <textarea rows="10" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} className="form-control" style={{ fontFamily: 'monospace' }}></textarea>
               </div>
 
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Cover Image Upload</label>
-                <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} style={{width: '100%', padding: '0.4rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                {uploading && <div style={{fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem'}}>Uploading...</div>}
-                {formData.coverImage && <div style={{fontSize: '0.8rem', color: 'var(--accent-color)', marginTop: '0.5rem'}}>Image selected: {formData.coverImage.split('/').pop()}</div>}
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Cover Image Upload</label>
+                <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} className="form-control" />
+                {uploading && <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Uploading...</div>}
+                {formData.coverImage && <div style={{ fontSize: '0.85rem', color: 'var(--accent-color)', marginTop: '0.5rem' }}>✓ Image selected: {formData.coverImage.split('/').pop()}</div>}
               </div>
 
-              <div style={{display: 'flex', gap: '1rem', marginTop: '0.5rem'}}>
-                <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)'}}>
-                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} />
-                  Published
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} style={{ width: '1.1rem', height: '1.1rem' }} />
+                  Publish immediately
                 </label>
               </div>
 
-              <div style={{display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem'}}>
-                <button type="button" onClick={() => setShowModal(false)} style={{padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--text-muted)', borderRadius: '4px', cursor: 'pointer'}}>Cancel</button>
-                <button type="submit" style={{padding: '0.5rem 1rem', background: 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>Save</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-outline">Cancel</button>
+                <button type="submit" className="btn btn-primary">{editId ? 'Save Changes' : 'Publish Blog'}</button>
               </div>
             </form>
           </div>

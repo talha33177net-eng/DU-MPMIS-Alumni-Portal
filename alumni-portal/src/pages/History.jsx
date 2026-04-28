@@ -1,7 +1,7 @@
 import { BookOpen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import api from '../lib/api';
-
+import 'react-quill-new/dist/quill.snow.css';
 const History = () => {
   const [content, setContent] = useState('');
   const [aboutImage, setAboutImage] = useState('');
@@ -36,9 +36,12 @@ const History = () => {
             <img loading="lazy" src={aboutImage.startsWith('http') ? aboutImage : `${import.meta.env.PROD ? "" : "http://localhost:5001"}${aboutImage}`} alt="Association History" style={{ width: '100%', maxHeight: '450px', objectFit: 'cover', display: 'block' }} />
           </div>
         )}
-        <div style={{ whiteSpace: 'pre-wrap', marginBottom: '2rem' }}>
-          {content || 'The history content has not been formally published yet.'}
-        </div>
+        {content
+          ? <div className="ql-snow" style={{ border: 'none' }}>
+              <div className="ql-editor" style={{ padding: 0 }} dangerouslySetInnerHTML={{ __html: content }} />
+            </div>
+          : <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>The history content has not been formally published yet.</div>
+        }
       </div>
     </div>
   );

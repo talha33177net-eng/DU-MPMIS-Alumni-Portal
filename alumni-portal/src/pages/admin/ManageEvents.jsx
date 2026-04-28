@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, Calendar } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, X } from 'lucide-react';
 import { format } from 'date-fns';
 
 const ManageEvents = () => {
@@ -173,82 +173,85 @@ const ManageEvents = () => {
       </div>
 
       {showModal && (
-        <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000}}>
-          <div style={{background: 'var(--background-secondary)', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto'}}>
-            <h2 style={{marginTop: 0, color: 'var(--accent-color)'}}>{editId ? 'Edit Event' : 'Create Event'}</h2>
-            <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-              
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '800px', maxHeight: '100%', overflowY: 'auto', backgroundColor: 'var(--surface-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, background: 'var(--surface-color)', zIndex: 10 }}>
+              <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>{editId ? 'Edit Event' : 'Create Event'}</h3>
+              <button onClick={() => setShowModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={24}/></button>
+            </div>
+            <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Title</label>
-                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Title *</label>
+                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="form-control" />
               </div>
 
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Description</label>
-                <textarea required rows="4" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}}></textarea>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Description *</label>
+                <textarea required rows="4" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="form-control"></textarea>
               </div>
 
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Cover Image</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Cover Image</label>
                 {formData.coverImage && (
-                   <div style={{marginBottom: '0.5rem'}}>
-                     <img loading="lazy" src={`${import.meta.env.PROD ? "" : "http://localhost:5001"}${formData.coverImage}`} alt="Cover preview" style={{width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '4px'}} />
-                   </div>
+                  <div style={{ marginBottom: '0.75rem' }}>
+                    <img loading="lazy" src={`${import.meta.env.PROD ? '' : 'http://localhost:5001'}${formData.coverImage}`} alt="Cover preview" style={{ width: '100%', maxHeight: '180px', objectFit: 'cover', borderRadius: '8px', border: '1px solid var(--border-color)' }} />
+                  </div>
                 )}
-                <input type="file" accept="image/*" onChange={handleImageUpload} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                <input type="file" accept="image/*" onChange={handleImageUpload} className="form-control" />
               </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 2}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Venue</label>
-                  <input required type="text" value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Venue *</label>
+                  <input required type="text" value={formData.venue} onChange={e => setFormData({...formData, venue: e.target.value})} className="form-control" />
                 </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Fee (৳)</label>
-                  <input type="number" min="0" step="1" value={formData.registrationFee} onChange={e => setFormData({...formData, registrationFee: e.target.value})} placeholder="0 = Free" style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-              </div>
-
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Event Date</label>
-                  <input required type="datetime-local" value={formData.eventDate} onChange={e => setFormData({...formData, eventDate: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Registration Deadline</label>
-                  <input type="datetime-local" value={formData.registrationDeadline} onChange={e => setFormData({...formData, registrationDeadline: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Fee (৳)</label>
+                  <input type="number" min="0" step="1" value={formData.registrationFee} onChange={e => setFormData({...formData, registrationFee: e.target.value})} placeholder="0 = Free" className="form-control" />
                 </div>
               </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Status</label>
-                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Event Date *</label>
+                  <input required type="datetime-local" value={formData.eventDate} onChange={e => setFormData({...formData, eventDate: e.target.value})} className="form-control" />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Registration Deadline</label>
+                  <input type="datetime-local" value={formData.registrationDeadline} onChange={e => setFormData({...formData, registrationDeadline: e.target.value})} className="form-control" />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Status</label>
+                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="form-control">
                     <option value="Upcoming">Upcoming</option>
                     <option value="Ongoing">Ongoing</option>
                     <option value="Completed">Completed</option>
                   </select>
                 </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Max Attendees</label>
-                  <input type="number" value={formData.maxAttendees} onChange={e => setFormData({...formData, maxAttendees: e.target.value})} placeholder="Leave blank for unlimited" style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Max Attendees</label>
+                  <input type="number" value={formData.maxAttendees} onChange={e => setFormData({...formData, maxAttendees: e.target.value})} placeholder="Leave blank for unlimited" className="form-control" />
                 </div>
               </div>
 
-              <div style={{display: 'flex', gap: '1rem', marginTop: '0.5rem'}}>
-                <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)'}}>
-                  <input type="checkbox" checked={formData.isRegistrationOpen} onChange={e => setFormData({...formData, isRegistrationOpen: e.target.checked})} />
+              <div style={{ display: 'flex', gap: '1.5rem', paddingTop: '0.5rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.isRegistrationOpen} onChange={e => setFormData({...formData, isRegistrationOpen: e.target.checked})} style={{ width: '1.1rem', height: '1.1rem' }} />
                   Registration Open
                 </label>
-                <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)'}}>
-                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} />
-                  Published
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} style={{ width: '1.1rem', height: '1.1rem' }} />
+                  Publish immediately
                 </label>
               </div>
 
-              <div style={{display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem'}}>
-                <button type="button" onClick={() => setShowModal(false)} style={{padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--text-muted)', borderRadius: '4px', cursor: 'pointer'}}>Cancel</button>
-                <button type="submit" style={{padding: '0.5rem 1rem', background: 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>Save</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-outline">Cancel</button>
+                <button type="submit" className="btn btn-primary">{editId ? 'Save Changes' : 'Create Event'}</button>
               </div>
             </form>
           </div>

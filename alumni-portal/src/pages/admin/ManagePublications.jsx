@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, BookOpen } from 'lucide-react';
+import { Plus, Edit, Trash2, BookOpen, X } from 'lucide-react';
 
 const ManagePublications = () => {
   const [pubType, setPubType] = useState('AGM_Reports');
@@ -178,20 +178,23 @@ const ManagePublications = () => {
       </div>
 
       {showModal && (
-        <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000}}>
-          <div style={{background: 'var(--background-secondary)', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto'}}>
-            <h2 style={{marginTop: 0, color: 'var(--accent-color)'}}>{editId ? 'Edit Document' : 'Upload Document'}</h2>
-            <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-              
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '650px', maxHeight: '100%', overflowY: 'auto', backgroundColor: 'var(--surface-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, background: 'var(--surface-color)', zIndex: 10 }}>
+              <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>{editId ? `Edit ${categoryTitle}` : `Upload ${categoryTitle}`}</h3>
+              <button onClick={() => setShowModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={24}/></button>
+            </div>
+            <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Document Title</label>
-                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Document Title *</label>
+                <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="form-control" />
               </div>
 
               <div>
-                <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Upload PDF</label>
-                <input 
-                  type="file" 
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Upload PDF</label>
+                <input
+                  type="file"
                   accept=".pdf, application/pdf"
                   onChange={async (e) => {
                     if (e.target.files && e.target.files[0]) {
@@ -199,31 +202,29 @@ const ManagePublications = () => {
                       const fd = new FormData();
                       fd.append('file', file);
                       try {
-                         const res = await api.post('/website-content/upload?purpose=publications', fd, {
-                           headers: { 'Content-Type': 'multipart/form-data' }
-                         });
-                         setFormData({...formData, attachmentUrl: typeof res.data === 'string' ? res.data : res});
-                         toast.success('PDF uploaded');
+                        const res = await api.post('/website-content/upload?purpose=publications', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+                        setFormData({...formData, attachmentUrl: typeof res.data === 'string' ? res.data : res});
+                        toast.success('PDF uploaded');
                       } catch (err) {
-                         toast.error('File upload failed');
+                        toast.error('File upload failed');
                       }
                     }
-                  }} 
-                  style={{width: '100%', padding: '0.4rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} 
+                  }}
+                  className="form-control"
                 />
-                {formData.attachmentUrl && <div style={{fontSize:'0.8rem', marginTop:'0.5rem', color:'green'}}><a href={`${import.meta.env.PROD ? "" : "http://localhost:5001"}${formData.attachmentUrl}`} target="_blank" rel="noreferrer" style={{color: '#3b82f6'}}>View Active Attachment</a></div>}
+                {formData.attachmentUrl && <div style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}><a href={`${import.meta.env.PROD ? '' : 'http://localhost:5001'}${formData.attachmentUrl}`} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-color)' }}>View Active Attachment</a></div>}
               </div>
 
-              <div style={{display: 'flex', gap: '1rem', marginTop: '0.5rem'}}>
-                <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)'}}>
-                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} />
-                  Published
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} style={{ width: '1.1rem', height: '1.1rem' }} />
+                  Publish immediately
                 </label>
               </div>
 
-              <div style={{display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem'}}>
-                <button type="button" onClick={() => setShowModal(false)} style={{padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--text-muted)', borderRadius: '4px', cursor: 'pointer'}}>Cancel</button>
-                <button type="submit" style={{padding: '0.5rem 1rem', background: 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>Save</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-outline">Cancel</button>
+                <button type="submit" className="btn btn-primary">{editId ? 'Save Changes' : 'Upload Document'}</button>
               </div>
             </form>
           </div>

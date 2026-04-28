@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
 import { Plus, Edit, Trash2, Image, Video, UploadCloud, X, Folder } from 'lucide-react';
@@ -368,98 +368,95 @@ const ManageGallery = () => {
       </div>
 
       {showModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div style={{ background: 'var(--background-secondary)', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '650px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h2 style={{ marginTop: 0, color: 'var(--accent-color)' }}>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '700px', maxHeight: '100%', overflowY: 'auto', backgroundColor: 'var(--surface-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, background: 'var(--surface-color)', zIndex: 10 }}>
+              <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>
                 {activeTab === 'Photo' ? (editingAlbumName ? 'Manage Album' : 'Create New Album') : (editId ? 'Edit Video' : 'Add New Video')}
-            </h2>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              
+              </h3>
+              <button onClick={() => setShowModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={24}/></button>
+            </div>
+            <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
               {activeTab === 'Video' && (
-                  <>
-                    <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>YouTube Video Link *</label>
-                      <input 
-                        required 
-                        type="url" 
-                        value={formData.mediaUrls[0] || ''} 
-                        onChange={e => setFormData({...formData, mediaUrls: [e.target.value]})} 
-                        style={{ width: '100%', padding: '0.6rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }} 
-                        placeholder="https://www.youtube.com/watch?v=..." 
-                      />
-                    </div>
-                    <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Title *</label>
-                      <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{ width: '100%', padding: '0.6rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }} placeholder="E.g., Batch Reunion Video" />
-                    </div>
-                  </>
+                <>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>YouTube Video Link *</label>
+                    <input
+                      required
+                      type="url"
+                      value={formData.mediaUrls[0] || ''}
+                      onChange={e => setFormData({...formData, mediaUrls: [e.target.value]})}
+                      className="form-control"
+                      placeholder="https://www.youtube.com/watch?v=..."
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Title *</label>
+                    <input required type="text" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="form-control" placeholder="E.g., Batch Reunion Video" />
+                  </div>
+                </>
               )}
 
               {activeTab === 'Photo' && (
                 <>
                   <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Album Name *</label>
-                    <input required type="text" value={formData.album} onChange={e => setFormData({...formData, album: e.target.value})} style={{ width: '100%', padding: '0.6rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }} placeholder="E.g., Reunion 2024" />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Album Name *</label>
+                    <input required type="text" value={formData.album} onChange={e => setFormData({...formData, album: e.target.value})} className="form-control" placeholder="E.g., Reunion 2024" />
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Album Description (Optional)</label>
-                    <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} style={{ width: '100%', padding: '0.6rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px' }}></textarea>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Album Description (Optional)</label>
+                    <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="form-control"></textarea>
                   </div>
 
                   {editingAlbumName && existingPhotos.length > 0 && (
-                      <div style={{ marginTop: '0.5rem', background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '6px' }}>
-                          <label style={{ display: 'block', marginBottom: '1rem', color: 'var(--accent-color)', fontWeight: 'bold' }}>Existing Photos in this Album</label>
-                          <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
-                              {existingPhotos.map(p => (
-                                  <div key={p.id} style={{ position: 'relative', width: '80px', height: '60px', borderRadius: '4px', overflow: 'hidden' }}>
-                                      <img loading="lazy" src={getMediaAbsoluteUrl(p.mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display='none'} />
-                                      <button type="button" onClick={() => deleteSinglePhoto(p.id)} style={{ position: 'absolute', top: 0, right: 0, background: 'rgba(239, 68, 68, 0.9)', color: 'white', border: 'none', borderRadius: '0 0 0 4px', cursor: 'pointer', padding: '0.1rem' }}>
-                                          <X size={14} />
-                                      </button>
-                                  </div>
-                              ))}
+                    <div style={{ padding: '1rem', background: 'var(--bg-color)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                      <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 600, color: 'var(--primary-color)' }}>Existing Photos in this Album</label>
+                      <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        {existingPhotos.map(p => (
+                          <div key={p.id} style={{ position: 'relative', width: '80px', height: '60px', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+                            <img loading="lazy" src={getMediaAbsoluteUrl(p.mediaUrl)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => e.target.style.display='none'} />
+                            <button type="button" onClick={() => deleteSinglePhoto(p.id)} style={{ position: 'absolute', top: 0, right: 0, background: 'rgba(239,68,68,0.9)', color: 'white', border: 'none', borderRadius: '0 0 0 4px', cursor: 'pointer', padding: '0.15rem' }}>
+                              <X size={13} />
+                            </button>
                           </div>
+                        ))}
                       </div>
+                    </div>
                   )}
 
-                  <div style={{ padding: '1rem', border: '2px dashed rgba(255,255,255,0.2)', borderRadius: '6px', textAlign: 'center', background: 'rgba(0,0,0,0.1)' }}>
-                     {uploading ? (
-                        <div style={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>Uploading files to server...</div>
-                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                          {formData.newMediaUrls.length > 0 && (
-                              <div style={{ color: '#10b981', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                                <UploadCloud size={20} /> {formData.newMediaUrls.length} File(s) Staged for Upload
-                              </div>
-                          )}
-                          <label style={{ cursor: 'pointer', color: 'var(--text-muted)' }}>
-                            <div style={{ marginBottom: '0.5rem' }}><Image size={32} /></div>
-                            Click here to Browse & Upload {formData.newMediaUrls.length > 0 ? "More" : "Multiple"} Photos
-                            <input 
-                              type="file" 
-                              multiple
-                              accept="image/*" 
-                              onChange={(e) => handleFileUpload(e.target.files)} 
-                              style={{ display: 'none' }} 
-                            />
-                          </label>
-                        </div>
-                     )}
+                  <div style={{ padding: '1.5rem', border: '2px dashed var(--border-color)', borderRadius: '8px', textAlign: 'center', background: 'var(--bg-color)' }}>
+                    {uploading ? (
+                      <div style={{ color: 'var(--accent-color)', fontWeight: 600 }}>Uploading files to server...</div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                        {formData.newMediaUrls.length > 0 && (
+                          <div style={{ color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <UploadCloud size={20} /> {formData.newMediaUrls.length} File(s) Staged
+                          </div>
+                        )}
+                        <label style={{ cursor: 'pointer', color: 'var(--text-muted)' }}>
+                          <div style={{ marginBottom: '0.5rem' }}><Image size={32} color="var(--accent-color)" /></div>
+                          Click to Browse & Upload {formData.newMediaUrls.length > 0 ? 'More' : 'Multiple'} Photos
+                          <input type="file" multiple accept="image/*" onChange={(e) => handleFileUpload(e.target.files)} style={{ display: 'none' }} />
+                        </label>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
 
-              <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} />
-                  Published
+              <div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.isPublished} onChange={e => setFormData({...formData, isPublished: e.target.checked})} style={{ width: '1.1rem', height: '1.1rem' }} />
+                  Publish immediately
                 </label>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-                <button type="button" onClick={() => setShowModal(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--text-muted)', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" disabled={uploading} style={{ padding: '0.5rem 1rem', background: uploading ? '#ccc' : 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Save & Apply</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-outline">Cancel</button>
+                <button type="submit" disabled={uploading} className="btn btn-primary">{editingAlbumName ? 'Save Album' : activeTab === 'Photo' ? 'Create Album' : (editId ? 'Save Changes' : 'Add Video')}</button>
               </div>
             </form>
           </div>
@@ -470,3 +467,4 @@ const ManageGallery = () => {
 };
 
 export default ManageGallery;
+

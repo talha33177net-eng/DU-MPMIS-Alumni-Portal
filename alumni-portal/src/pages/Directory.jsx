@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Search, Mail, Phone } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, Mail, Phone, Lock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../lib/api';
+import { useAuth } from '../contexts/AuthContext';
 import css from './Directory.module.css';
 
 const Directory = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
   useEffect(() => {
+    if (!user) { setLoading(false); return; }
     const fetchMembers = async () => {
       try {
         const result = await api.get('/directory?per_page=200');
@@ -21,12 +25,34 @@ const Directory = () => {
       }
     };
     fetchMembers();
-  }, []);
+  }, [user]);
 
   const filteredMembers = members.filter(m => {
     return m.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (m.batch && m.batch.toLowerCase().includes(searchTerm.toLowerCase()));
   });
+
+  if (!user) {
+    return (
+      <div className="section container animate-fade-in" style={{ textAlign: 'center', padding: '5rem 1rem' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: 'var(--bg-secondary)', marginBottom: '1.5rem' }}>
+          <Lock size={36} color="var(--primary-color)" />
+        </div>
+        <h1 style={{ fontSize: '2rem', fontFamily: 'var(--font-serif)', color: 'var(--primary-color)', marginBottom: '0.75rem' }}>Alumni E-Directory</h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', maxWidth: '480px', margin: '0 auto 2rem' }}>
+          Please log in to access the Alumni E-Directory and connect with fellow graduates.
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button onClick={() => navigate('/login')} className="btn btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
+            Login to Access
+          </button>
+          <button onClick={() => navigate('/register')} className="btn btn-outline" style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
+            Create Account
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="section container animate-fade-in">

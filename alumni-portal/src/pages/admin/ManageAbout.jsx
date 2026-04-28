@@ -255,12 +255,22 @@ const ManageAbout = () => {
             </div>
           </div>
 
-          <textarea 
-            style={{ ...inputStyle, minHeight: '300px', resize: 'vertical' }}
-            value={websiteContent.historyContent || ''}
-            onChange={(e) => setWebsiteContent({...websiteContent, historyContent: e.target.value})}
-            placeholder="Our journey began in..."
-          />
+          <div style={{ marginBottom: '2rem' }}>
+            <ReactQuill 
+              theme="snow"
+              value={websiteContent.historyContent || ''} 
+              onChange={(content) => setWebsiteContent({...websiteContent, historyContent: content})}
+              style={{ height: '350px', marginBottom: '3.5rem' }}
+              modules={{
+                toolbar: [
+                  [{ 'header': [1, 2, 3, false] }],
+                  ['bold', 'italic', 'underline', 'strike'],
+                  [{'list': 'ordered'}, {'list': 'bullet'}],
+                  ['link', 'clean']
+                ]
+              }}
+            />
+          </div>
           <button className="btn btn-primary" onClick={saveWebsiteContent} disabled={wcSaving || wcLoading}>
             {wcSaving ? 'Saving...' : 'Save History'}
           </button>

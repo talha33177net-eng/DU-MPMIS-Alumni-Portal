@@ -1,7 +1,7 @@
 ﻿import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import toast from 'react-hot-toast';
-import { Plus, Edit, Trash2, Check, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, Check, Users, X } from 'lucide-react';
 
 const ManageMembers = () => {
   const [members, setMembers] = useState([]);
@@ -226,33 +226,34 @@ const ManageMembers = () => {
       </div>
 
       {showModal && (
-        <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000}}>
-          <div style={{background: 'var(--background-secondary)', padding: '2rem', borderRadius: '8px', width: '100%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto'}}>
-            <h2 style={{marginTop: 0, color: 'var(--accent-color)'}}>{editId ? 'Edit Member' : 'Add Member'}</h2>
-            <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-              
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Profile Photo</label>
-                  <div style={{display: 'flex', gap: '1rem', alignItems: 'center'}}>
-                    {formData.profilePhoto && (
-                      <div style={{width: '40px', height: '40px', borderRadius: '50%', overflow: 'hidden', background: '#333'}}>
-                        <img loading="lazy" src={`${import.meta.env.PROD ? "" : "http://localhost:5001"}${formData.profilePhoto}`} alt="Profile" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                      </div>
-                    )}
-                    <input type="file" accept="image/*" onChange={handlePhotoUpload} style={{flex: 1, padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                  </div>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '2rem' }}>
+          <div className="card" style={{ width: '100%', maxWidth: '860px', maxHeight: '100%', overflowY: 'auto', backgroundColor: 'var(--surface-color)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderBottom: '1px solid var(--border-color)', position: 'sticky', top: 0, background: 'var(--surface-color)', zIndex: 10 }}>
+              <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>{editId ? 'Edit Member' : 'Add New Member'}</h3>
+              <button onClick={() => setShowModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><X size={24}/></button>
+            </div>
+            <form onSubmit={handleSubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+              {/* Profile Photo */}
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Profile Photo</label>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  {formData.profilePhoto && (
+                    <img loading="lazy" src={`${import.meta.env.PROD ? '' : 'http://localhost:5001'}${formData.profilePhoto}`} alt="Profile" style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border-color)' }} />
+                  )}
+                  <input type="file" accept="image/*" onChange={handlePhotoUpload} className="form-control" />
                 </div>
               </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Full Name *</label>
-                  <input required type="text" value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+              {/* Basic Info */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Full Name *</label>
+                  <input required type="text" value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} className="form-control" />
                 </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Member Type *</label>
-                  <select required value={formData.memberType} onChange={e => setFormData({...formData, memberType: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Member Type *</label>
+                  <select required value={formData.memberType} onChange={e => setFormData({...formData, memberType: e.target.value})} className="form-control">
                     <option value="General">General</option>
                     <option value="LifeTime">LifeTime</option>
                     <option value="InMemoriam">In Memoriam</option>
@@ -262,113 +263,109 @@ const ManageMembers = () => {
 
               {formData.memberType !== 'InMemoriam' && (
                 <>
-                  <div style={{display: 'flex', gap: '1rem'}}>
-                    <div style={{flex: 1}}>
-                      <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Email</label>
-                  <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Phone</label>
-                  <input type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Member/Student ID</label>
-                  <input type="text" value={formData.studentId} onChange={e => setFormData({...formData, studentId: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-              </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Email</label>
+                      <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Phone</label>
+                      <input type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Student ID</label>
+                      <input type="text" value={formData.studentId} onChange={e => setFormData({...formData, studentId: e.target.value})} className="form-control" />
+                    </div>
+                  </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Home District/City</label>
-                  <input type="text" value={formData.homeDistrictOrCity} onChange={e => setFormData({...formData, homeDistrictOrCity: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Nationality</label>
-                  <input type="text" value={formData.nationality} onChange={e => setFormData({...formData, nationality: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Blood Group</label>
-                  <select value={formData.bloodGroup} onChange={e => setFormData({...formData, bloodGroup: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}}>
-                    <option value="">Select...</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                  </select>
-                </div>
-              </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Home District/City</label>
+                      <input type="text" value={formData.homeDistrictOrCity} onChange={e => setFormData({...formData, homeDistrictOrCity: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Nationality</label>
+                      <input type="text" value={formData.nationality} onChange={e => setFormData({...formData, nationality: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Blood Group</label>
+                      <select value={formData.bloodGroup} onChange={e => setFormData({...formData, bloodGroup: e.target.value})} className="form-control">
+                        <option value="">Select...</option>
+                        <option value="A+">A+</option><option value="A-">A-</option>
+                        <option value="B+">B+</option><option value="B-">B-</option>
+                        <option value="O+">O+</option><option value="O-">O-</option>
+                        <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Marital Status</label>
-                  <select value={formData.maritalStatus} onChange={e => setFormData({...formData, maritalStatus: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}}>
-                    <option value="">Select...</option>
-                    <option value="Single">Single</option>
-                    <option value="Married">Married</option>
-                  </select>
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Spouse Name</label>
-                  <input type="text" value={formData.spouseName} onChange={e => setFormData({...formData, spouseName: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-              </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Marital Status</label>
+                      <select value={formData.maritalStatus} onChange={e => setFormData({...formData, maritalStatus: e.target.value})} className="form-control">
+                        <option value="">Select...</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Spouse Name</label>
+                      <input type="text" value={formData.spouseName} onChange={e => setFormData({...formData, spouseName: e.target.value})} className="form-control" />
+                    </div>
+                  </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Date of Birth</label>
-                  <input type="date" value={formData.dateOfBirth} onChange={e => setFormData({...formData, dateOfBirth: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px', colorScheme: 'dark'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Gender</label>
-                  <select value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}}>
-                    <option value="">Select...</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Date of Birth</label>
+                      <input type="date" value={formData.dateOfBirth} onChange={e => setFormData({...formData, dateOfBirth: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Gender</label>
+                      <select value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} className="form-control">
+                        <option value="">Select...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                   </div>
                 </>
               )}
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Admission Session (Batch)</label>
-                  <input type="text" value={formData.batch} onChange={e => setFormData({...formData, batch: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Admission Session (Batch)</label>
+                  <input type="text" value={formData.batch} onChange={e => setFormData({...formData, batch: e.target.value})} className="form-control" />
                 </div>
                 {formData.memberType !== 'InMemoriam' ? (
-                  <div style={{flex: 1}}>
-                    <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>MA/MSS Year</label>
-                  <input type="text" value={formData.passingYear} onChange={e => setFormData({...formData, passingYear: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>MA/MSS Year</label>
+                    <input type="text" value={formData.passingYear} onChange={e => setFormData({...formData, passingYear: e.target.value})} className="form-control" />
                   </div>
-                ) : <div style={{flex: 1}}></div>}
+                ) : <div />}
               </div>
 
               {formData.memberType !== 'InMemoriam' && (
                 <>
-                  <div style={{display: 'flex', gap: '1rem'}}>
-                    <div style={{flex: 1}}>
-                      <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Organization Name</label>
-                  <input type="text" value={formData.currentOrganization} onChange={e => setFormData({...formData, currentOrganization: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Designation</label>
-                  <input type="text" value={formData.currentDesignation} onChange={e => setFormData({...formData, currentDesignation: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-              </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Organization Name</label>
+                      <input type="text" value={formData.currentOrganization} onChange={e => setFormData({...formData, currentOrganization: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Designation</label>
+                      <input type="text" value={formData.currentDesignation} onChange={e => setFormData({...formData, currentDesignation: e.target.value})} className="form-control" />
+                    </div>
+                  </div>
 
-              <div style={{display: 'flex', gap: '1rem'}}>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Work City / Address</label>
-                  <input type="text" value={formData.workCity} onChange={e => setFormData({...formData, workCity: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                </div>
-                <div style={{flex: 1}}>
-                  <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Facebook Link</label>
-                  <input type="text" value={formData.facebookUrl} onChange={e => setFormData({...formData, facebookUrl: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Work City / Address</label>
+                      <input type="text" value={formData.workCity} onChange={e => setFormData({...formData, workCity: e.target.value})} className="form-control" />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Facebook Link</label>
+                      <input type="text" value={formData.facebookUrl} onChange={e => setFormData({...formData, facebookUrl: e.target.value})} className="form-control" />
                     </div>
                   </div>
                 </>
@@ -376,31 +373,27 @@ const ManageMembers = () => {
 
               {formData.memberType === 'InMemoriam' && (
                 <>
-                  <div style={{display: 'flex', gap: '1rem'}}>
-                    <div style={{flex: 1}}>
-                      <label style={{display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)'}}>Description / Bio</label>
-                      <textarea value={formData.bio} onChange={e => setFormData({...formData, bio: e.target.value})} rows={3} style={{width: '100%', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '4px'}} />
-                    </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Description / Bio</label>
+                    <textarea value={formData.bio} onChange={e => setFormData({...formData, bio: e.target.value})} rows={3} className="form-control" />
                   </div>
-                  <div style={{display: 'flex', gap: '1rem'}}>
-                    <div style={{flex: 0.5}}>
-                      <label style={{display: 'block', marginBottom: '0.5rem', color: '#ff6b6b'}}>Date of Death</label>
-                    <input type="date" value={formData.dateOfDeath} onChange={e => setFormData({...formData, dateOfDeath: e.target.value})} style={{width: '100%', padding: '0.5rem', background: 'rgba(255,0,0,0.1)', border: '1px solid #ff6b6b', color: 'white', borderRadius: '4px', colorScheme: 'dark'}} />
-                    </div>
+                  <div style={{ maxWidth: '240px' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: 'var(--danger)' }}>Date of Death</label>
+                    <input type="date" value={formData.dateOfDeath} onChange={e => setFormData({...formData, dateOfDeath: e.target.value})} className="form-control" />
                   </div>
                 </>
               )}
 
-              <div style={{display: 'flex', gap: '1rem', marginTop: '0.5rem'}}>
-                <label style={{display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)'}}>
-                  <input type="checkbox" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} />
-                  Active / Public
+              <div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>
+                  <input type="checkbox" checked={formData.isActive} onChange={e => setFormData({...formData, isActive: e.target.checked})} style={{ width: '1.1rem', height: '1.1rem' }} />
+                  Active / Show in Directory
                 </label>
               </div>
 
-              <div style={{display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem'}}>
-                <button type="button" onClick={() => setShowModal(false)} style={{padding: '0.5rem 1rem', background: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--text-muted)', borderRadius: '4px', cursor: 'pointer'}}>Cancel</button>
-                <button type="submit" style={{padding: '0.5rem 1rem', background: 'var(--accent-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer'}}>Save Profile</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                <button type="button" onClick={() => setShowModal(false)} className="btn btn-outline">Cancel</button>
+                <button type="submit" className="btn btn-primary">{editId ? 'Save Changes' : 'Add Member'}</button>
               </div>
             </form>
           </div>
